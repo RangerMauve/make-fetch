@@ -1,0 +1,34 @@
+{
+  "name": "make-fetch",
+  "version": "1.0.0",
+  "description": "Implement your own `fetch()` with node.js streams",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RangerMauve/make-fetch.git"
+  },
+  "keywords": [
+    "fetch",
+    "custom",
+    "request",
+    "fake"
+  ],
+  "author": "rangermauve <ranger@mauve.moe> (https://mauve.moe/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RangerMauve/make-fetch/issues"
+  },
+  "homepage": "https://github.com/RangerMauve/make-fetch#readme",
+  "dependencies": {
+    "concat-stream": "^2.0.0",
+    "fetch-headers": "^2.0.0",
+    "fetch-request-body-to-stream": "^1.0.0",
+    "statuses": "^2.0.0"
+  },
+  "devDependencies": {
+    "tape": "^5.0.1"
+  }
+}
