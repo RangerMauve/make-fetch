@@ -27,11 +27,16 @@ module.exports = function makeFetch (handler) {
 
     return new Promise((resolve, reject) => {
       handler({ url, headers, method, body, referrer }, (response) => {
-        const { statusCode, headers: rawResponseHeaders, data } = response
+        const {
+          statusCode,
+          statusText: rawStatusText,
+          headers: rawResponseHeaders,
+          data
+        } = response
 
         try {
           const responseHeaders = new Headers(rawResponseHeaders || {})
-          const statusText = getStatus(statusCode)
+          const statusText = rawStatusText || getStatus(statusCode)
 
           resolve(new FakeResponse(statusCode, statusText, responseHeaders, data, url))
         } catch (e) {

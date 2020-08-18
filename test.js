@@ -28,6 +28,8 @@ test('Kitchen sink', async (t) => {
 
     t.equal(response.headers.get('url'), toFetch, 'got expected response headers')
 
+    t.equal(response.statusText, 'OK', 'got expected status text')
+
     t.end()
   } catch (e) {
     t.error(e)
