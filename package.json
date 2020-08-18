@@ -1,6 +1,6 @@
 {
   "name": "make-fetch",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Implement your own `fetch()` with node.js streams",
   "main": "index.js",
   "scripts": {
