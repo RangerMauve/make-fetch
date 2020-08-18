@@ -82,10 +82,11 @@ class FakeResponse {
 function headersToObject (headers) {
   if (!headers) return {}
   if (typeof headers.entries === 'function') {
-    return [...headers.entries()].reduce(([key, value], result) => {
+    const result = {}
+    for(let [key, value] of headers) {
       result[key] = value
-      return result
-    }, {})
+    }
+    return result
   } else headersToObject(new Headers(headers || {}))
 }
 
