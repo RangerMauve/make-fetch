@@ -1,7 +1,6 @@
 const Headers = require('fetch-headers')
-const bodyToStream = require('fetch-request-body-to-stream')
-const concat = require('concat-stream')
 const getStatus = require('statuses')
+const bodyToIterator = require('fetch-request-body-to-async-iterator')
 
 module.exports = function makeFetch (handler) {
   return async function fetch (resource, init = {}) {
@@ -23,27 +22,25 @@ module.exports = function makeFetch (handler) {
 
     const headers = rawHeaders ? headersToObject(rawHeaders) : {}
     const method = (rawMethod || 'GET').toUpperCase()
-    const body = rawBody ? bodyToStream(rawBody) : null
+    const body = rawBody ? bodyToIterator(rawBody) : null
 
-    return new Promise((resolve, reject) => {
-      handler({ url, headers, method, body, referrer }, (response) => {
-        const {
-          statusCode,
-          statusText: rawStatusText,
-          headers: rawResponseHeaders,
-          data
-        } = response
-
-        try {
-          const responseHeaders = new Headers(rawResponseHeaders || {})
-          const statusText = rawStatusText || getStatus(statusCode)
-
-          resolve(new FakeResponse(statusCode, statusText, responseHeaders, data, url))
-        } catch (e) {
-          reject(e)
-        }
-      })
+    const {
+      statusCode,
+      statusText: rawStatusText,
+      headers: rawResponseHeaders,
+      data
+    } = await handler({
+      url,
+      headers,
+      method,
+      body,
+      referrer
     })
+
+    const responseHeaders = new Headers(rawResponseHeaders || {})
+    const statusText = rawStatusText || getStatus(statusCode)
+
+    return new FakeResponse(statusCode, statusText, responseHeaders, data, url)
   }
 }
 
@@ -65,12 +62,12 @@ class FakeResponse {
   }
 
   async arrayBuffer () {
-    const buffer = await concatPromise(this.body)
+    const buffer = await collectBuffers(this.body)
     return buffer.buffer
   }
 
   async text () {
-    const buffer = await concatPromise(this.body)
+    const buffer = await collectBuffers(this.body)
     return buffer.toString('utf-8')
   }
 
@@ -83,17 +80,18 @@ function headersToObject (headers) {
   if (!headers) return {}
   if (typeof headers.entries === 'function') {
     const result = {}
-    for(let [key, value] of headers) {
+    for (const [key, value] of headers) {
       result[key] = value
     }
     return result
   } else headersToObject(new Headers(headers || {}))
 }
 
-function concatPromise (stream) {
-  return new Promise((resolve, reject) => {
-    var concatStream = concat(resolve)
-    concatStream.once('error', reject)
-    stream.pipe(concatStream)
-  })
+async function collectBuffers (iterable) {
+  const all = []
+  for await (const buff of iterable) {
+    all.push(Buffer.from(buff))
+  }
+
+  return Buffer.concat(all)
 }

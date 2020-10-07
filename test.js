@@ -1,19 +1,17 @@
-
-const { Readable } = require('stream')
 const test = require('tape')
 
 const makeFetch = require('./')
 
 test('Kitchen sink', async (t) => {
   try {
-    const fetch = makeFetch(({ url }, sendResponse) => {
-      sendResponse({
+    const fetch = makeFetch(({ url }) => {
+      return {
         statusCode: 200,
         headers: {
           url
         },
-        data: intoStream(url)
-      })
+        data: intoAsyncIterable(url)
+      }
     })
 
     const toFetch = 'example'
@@ -36,11 +34,6 @@ test('Kitchen sink', async (t) => {
   }
 })
 
-function intoStream (data) {
-  return new Readable({
-    read () {
-      this.push(data)
-      this.push(null)
-    }
-  })
+async function * intoAsyncIterable (data) {
+  yield data
 }
