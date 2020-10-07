@@ -15,7 +15,8 @@ const fetch = makeFetch(async (request) => {
     headers, // An object mapping header titles to values
     referrer, // An optional string specify the referrer 
     method, // The HTTP method, will always be uppercase, default is `GET`
-    body // An optional async iterable of buffers for the request body
+    body, // An optional async iterable of buffers for the request body
+    signal // An optional AbortSignal that you might want to listen to for cancellation
   } = request
 
   return {

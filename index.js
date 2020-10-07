@@ -17,7 +17,8 @@ module.exports = function makeFetch (handler) {
       headers: rawHeaders,
       method: rawMethod,
       body: rawBody,
-      referrer
+      referrer,
+      signal
     } = resource
 
     const headers = rawHeaders ? headersToObject(rawHeaders) : {}
@@ -28,7 +29,8 @@ module.exports = function makeFetch (handler) {
       statusCode,
       statusText: rawStatusText,
       headers: rawResponseHeaders,
-      data
+      data,
+      signal
     } = await handler({
       url,
       headers,
