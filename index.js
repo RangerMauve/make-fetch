@@ -29,14 +29,14 @@ module.exports = function makeFetch (handler) {
       statusCode,
       statusText: rawStatusText,
       headers: rawResponseHeaders,
-      data,
-      signal
+      data
     } = await handler({
       url,
       headers,
       method,
       body,
-      referrer
+      referrer,
+      signal
     })
 
     const responseHeaders = new Headers(rawResponseHeaders || {})
