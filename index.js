@@ -86,7 +86,7 @@ function headersToObject (headers) {
       result[key] = value
     }
     return result
-  } else headersToObject(new Headers(headers || {}))
+  } else return headersToObject(new Headers(headers || {}))
 }
 
 async function collectBuffers (iterable) {
