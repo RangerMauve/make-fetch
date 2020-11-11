@@ -110,7 +110,6 @@ function headersToObject (headers) {
 async function collectBuffers (iterable) {
   const all = []
   for await (const buff of iterable) {
-    console.log(buff)
     all.push(Buffer.from(buff))
   }
 
