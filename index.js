@@ -1,6 +1,7 @@
 const Headers = require('fetch-headers')
 const getStatus = require('statuses')
 const bodyToIterator = require('fetch-request-body-to-async-iterator')
+const { TransformStream } = require('web-streams-polyfill/ponyfill/es6')
 
 module.exports = function makeFetch (handler) {
   return async function fetch (resource, init = {}) {
@@ -47,8 +48,8 @@ module.exports = function makeFetch (handler) {
 }
 
 class FakeResponse {
-  constructor (status, statusText, headers, stream, url) {
-    this.body = stream
+  constructor (status, statusText, headers, iterator, url) {
+    this.body = makeBody(iterator)
     this.headers = headers
     this.url = url
     this.status = status
@@ -78,6 +79,23 @@ class FakeResponse {
   }
 }
 
+function makeBody (iterator) {
+  const { readable, writable } = new TransformStream();
+  (async () => {
+    try {
+      const writer = writable.getWriter()
+      try {
+        for await (const x of iterator) await writer.write(x)
+      } finally {
+        await writer.close()
+      }
+    } catch {
+      // There was some sort of unhandled error?
+    }
+  })()
+  return readable
+}
+
 function headersToObject (headers) {
   if (!headers) return {}
   if (typeof headers.entries === 'function') {
@@ -92,6 +110,7 @@ function headersToObject (headers) {
 async function collectBuffers (iterable) {
   const all = []
   for await (const buff of iterable) {
+    console.log(buff)
     all.push(Buffer.from(buff))
   }
 
