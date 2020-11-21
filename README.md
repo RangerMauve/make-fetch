@@ -35,4 +35,4 @@ console.log(await response.text())
 ## Gotchas
 
 - The `response.body` is an Async Iterable of Buffer objects rather than a WHATWG ReadableStream
-- Eventually ReadableStream will become asyn citerable so you'll be able to iterate either normally
+- Eventually ReadableStream will become async iterable so you'll be able to iterate either normally
