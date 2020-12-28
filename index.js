@@ -14,6 +14,7 @@ module.exports = function makeFetch (handler) {
     }
 
     const {
+      session,
       url,
       headers: rawHeaders,
       method: rawMethod,
@@ -24,7 +25,7 @@ module.exports = function makeFetch (handler) {
 
     const headers = rawHeaders ? headersToObject(rawHeaders) : {}
     const method = (rawMethod || 'GET').toUpperCase()
-    const body = rawBody ? bodyToIterator(rawBody) : null
+    const body = rawBody ? bodyToIterator(rawBody, session) : null
 
     const {
       statusCode,
