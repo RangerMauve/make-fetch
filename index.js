@@ -75,8 +75,21 @@ class FakeResponse {
     return buffer.toString('utf-8')
   }
 
-  async json () {
-    return JSON.parse(await this.text())
+  async json() {
+    let text
+    try {
+      text = await this.text()
+      return JSON.parse(text)
+    } catch (error) {
+      /** 
+       * "The HEAD method is identical to GET 
+       * except that the server 
+       * MUST NOT send a message body in the response" 
+       * 
+       * swallow the error when text is falsy as it is likely a HEAD request
+       * */
+      if (text) throw error
+    }
   }
 }
 
