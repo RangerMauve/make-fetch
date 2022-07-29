@@ -67,7 +67,9 @@ class FakeResponse {
 
   async arrayBuffer () {
     const buffer = await collectBuffers(this.body)
-    return buffer.buffer
+    const {byteOffset, length} = buffer
+    const end = byteOffset + length
+    return buffer.buffer.slice(buffer.byteOffset, end)
   }
 
   async text () {
