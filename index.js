@@ -11,6 +11,8 @@ module.exports = function makeFetch (handler) {
         ...(init || {}),
         url: resource
       })
+    } else if (resource instanceof URL) {
+      return fetch(resource.href, init)
     }
 
     const {
@@ -67,7 +69,7 @@ class FakeResponse {
 
   async arrayBuffer () {
     const buffer = await collectBuffers(this.body)
-    const {byteOffset, length} = buffer
+    const { byteOffset, length } = buffer
     const end = byteOffset + length
     return buffer.buffer.slice(buffer.byteOffset, end)
   }

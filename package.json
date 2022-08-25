@@ -4,7 +4,8 @@
   "description": "Implement your own `fetch()` with node.js streams",
   "main": "index.js",
   "scripts": {
-    "test": "node test"
+    "test": "node test",
+    "lint": "standard --fix"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "web-streams-polyfill": "^3.0.0"
   },
   "devDependencies": {
+    "standard": "^17.0.0",
     "tape": "^5.0.1"
   }
 }
