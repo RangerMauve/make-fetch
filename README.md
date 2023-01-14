@@ -73,12 +73,14 @@ Instead of having a separate parameter for the body and the response options, th
 
 This will then return a standard [fetch](https://developer.mozilla.org/en-US/docs/Web/API/fetch) API which takes request info, and returns responses.
 
-`makeRoutedFetch({onNotFound}) => {router: Router, fetch}`
+`makeRoutedFetch({onNotFound, onError}) => {router: Router, fetch}`
 
 If you want to have an easier way of routing different methods/hostnames/paths, you can use a routed make-fetch which can make it easier to register handlers for different routes.
 This will creat a Router, and a `fetch()` instance for that router.
 Handlers you add on the router will be useful to match URLs+methods from the fetch request and will use the matched handler to generate the response.
 You can optionally supply a `onNotFound` handler to be invoked if no other routes match.
+You can optionally supply a `onError` handler to be invoked when an error is thrown from your handlers which will take the `Error` instance and the `Request` instance as arguments.
+The default `onError` handler will print the stack trace to the body with a `500` status code.
 
 `router.add(method, urlPattern, handler) => Router`
 

@@ -18,7 +18,8 @@ export function makeFetch (handler, {
 }
 
 export function makeRoutedFetch ({
-  onNotFound = DEFAULT_NOT_FOUND
+  onNotFound = DEFAULT_NOT_FOUND,
+  onError = DEFAULT_ON_ERROR
 } = {}) {
   const router = new Router()
 
@@ -27,7 +28,11 @@ export function makeRoutedFetch ({
     if (!route) {
       return onNotFound(request)
     }
-    return route.handler(request)
+    try {
+      return route.handler(request)
+    } catch (e) {
+      return await onError(e, request)
+    }
   })
 
   return { fetch, router }
@@ -35,6 +40,16 @@ export function makeRoutedFetch ({
 
 export function DEFAULT_NOT_FOUND () {
   return { status: 404, statusText: 'Invalid URL' }
+}
+
+export function DEFAULT_ON_ERROR (e) {
+  return {
+    status: 500,
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8'
+    },
+    body: e.stack
+  }
 }
 
 export class Router {
@@ -116,7 +131,7 @@ function matches (request, route, property) {
 
       const routeSegment = routeSegments[i]
       const requestSegment = requestSegments[i]
-      const routeWild = routeSegments === WILDCARD
+      const routeWild = routeSegment === WILDCARD
       const matches = routeWild || (routeSegment === requestSegment)
 
       if (routeLast) {
