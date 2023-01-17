@@ -29,7 +29,8 @@ export function makeRoutedFetch ({
       return onNotFound(request)
     }
     try {
-      return route.handler(request)
+      const response = await route.handler(request)
+      return response
     } catch (e) {
       return await onError(e, request)
     }
