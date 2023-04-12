@@ -150,6 +150,8 @@ function matches (request, route, property) {
     return areEqual(route.hostname, new URL(request.url).hostname)
   } else if (property === 'protocol') {
     return areEqual(route.protocol, new URL(request.url).protocol)
+  } else if(property === 'method') {
+    return areEqual(route.method, request.method.toUpperCase())
   } else {
     const routeProperty = route[property]
     const requestProperty = request[property]
