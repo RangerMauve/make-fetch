@@ -31,6 +31,36 @@ test('Basic makeFetch test', async (t) => {
   t.end()
 })
 
+test.only('Basic makeFetch test with Request object', async (t) => {
+  const fetch = makeFetch(({ url }) => {
+    return {
+      status: 200,
+      statusText: 'OK',
+      headers: {
+        url
+      },
+      body: intoAsyncIterable(url)
+    }
+  })
+
+  const toFetch = new Request('example://hostname/pathname')
+
+  const response = await fetch(toFetch)
+
+  t.ok(response.ok, 'response was OK')
+
+  const body = await response.text()
+
+  t.equal(body, toFetch.url, 'got expected response body')
+
+  t.equal(response.headers.get('url'), toFetch.url, 'got expected response headers')
+
+  t.equal(response.statusText, 'OK', 'got expected status text')
+
+  t.end()
+})
+
+
 test('Basic router tests', async (t) => {
   const { fetch, router } = makeRoutedFetch()
 

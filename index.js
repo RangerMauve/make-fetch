@@ -7,7 +7,8 @@ export function makeFetch (handler, {
   Response = globalThis.Response
 } = {}) {
   return async function fetch (...requestOptions) {
-    const request = new Request(...requestOptions)
+    const isAlreadyRequest = requestOptions[0] instanceof Request
+    const request = isAlreadyRequest ? requestOptions[0] : new Request(...requestOptions)
 
     const { body = null, ...responseOptions } = await handler(request)
 
@@ -150,7 +151,7 @@ function matches (request, route, property) {
     return areEqual(route.hostname, new URL(request.url).hostname)
   } else if (property === 'protocol') {
     return areEqual(route.protocol, new URL(request.url).protocol)
-  } else if(property === 'method') {
+  } else if (property === 'method') {
     return areEqual(route.method, request.method.toUpperCase())
   } else {
     const routeProperty = route[property]
