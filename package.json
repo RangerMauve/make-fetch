@@ -4,6 +4,7 @@
   "description": "Implement your own `fetch()` with node.js streams",
   "main": "index.js",
   "type": "module",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "test": "node test",
     "lint": "standard --fix && tsc --noEmit",
