@@ -31,7 +31,7 @@ test('Basic makeFetch test', async (t) => {
   t.end()
 })
 
-test.only('Basic makeFetch test with Request object', async (t) => {
+test('Basic makeFetch test with Request object', async (t) => {
   const fetch = makeFetch(({ url }) => {
     return {
       status: 200,
@@ -60,7 +60,6 @@ test.only('Basic makeFetch test with Request object', async (t) => {
   t.end()
 })
 
-
 test('Basic router tests', async (t) => {
   const { fetch, router } = makeRoutedFetch()
 
@@ -78,6 +77,10 @@ test('Basic router tests', async (t) => {
   t.equal(body, toFetch, 'got expected body')
 })
 
+/**
+ * @param {string} data 
+ * @returns {AsyncIterable<string>}
+ */
 async function * intoAsyncIterable (data) {
   yield data
 }
