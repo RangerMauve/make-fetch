@@ -78,7 +78,7 @@ test('Basic router tests', async (t) => {
 })
 
 /**
- * @param {string} data 
+ * @param {string} data
  * @returns {AsyncIterable<string>}
  */
 async function * intoAsyncIterable (data) {

@@ -12,7 +12,7 @@
  * @property {Handler} handler
 */
 
-/** @typedef {'pathname' | 'hostname' | 'protocol' | 'method'} MatchProperty*/
+/** @typedef {'pathname' | 'hostname' | 'protocol' | 'method'} MatchProperty */
 
 /** @type {MatchProperty[]} */
 const MATCH_ORDER = ['method', 'protocol', 'hostname', 'pathname']
@@ -20,10 +20,10 @@ const MATCH_ORDER = ['method', 'protocol', 'hostname', 'pathname']
 export const WILDCARD = '*'
 
 /**
- * @param {Handler} handler 
+ * @param {Handler} handler
  * @param {object} [options]
  * @param {typeof globalThis.Request} [options.Request]
- * @param {typeof globalThis.Response} [options.Response] 
+ * @param {typeof globalThis.Response} [options.Response]
  * @returns {typeof fetch}
  */
 export function makeFetch (handler, {
@@ -31,7 +31,7 @@ export function makeFetch (handler, {
   Response = globalThis.Response
 } = {}) {
   return fetch
-  
+
   /** @type {typeof globalThis.fetch} */
   async function fetch (...requestOptions) {
     const isAlreadyRequest = requestOptions[0] instanceof Request
@@ -47,11 +47,11 @@ export function makeFetch (handler, {
 }
 
 /**
- * 
- * @param {object} [options] 
+ *
+ * @param {object} [options]
  * @param {Handler} [options.onNotFound]
  * @param {ErrorHandler} [options.onError]
- * @returns 
+ * @returns
  */
 export function makeRoutedFetch ({
   onNotFound = DEFAULT_NOT_FOUND,
@@ -62,7 +62,7 @@ export function makeRoutedFetch ({
   const fetch = makeFetch(handler)
 
   /**
-   * @param {Request} request 
+   * @param {Request} request
    * @returns {Promise<ResponseLike>}
    */
   async function handler (request) {
@@ -99,79 +99,73 @@ export function DEFAULT_ON_ERROR (e) {
 
 export class Router {
   constructor () {
-    this.routes = /** @type {Route[]}*/ ([])
+    this.routes = /** @type {Route[]} */ ([])
   }
 
   /**
-   * 
-   * @param {string} url 
-   * @param {Handler} handler 
+   *
+   * @param {string} url
+   * @param {Handler} handler
    * @returns {Router}
    */
   get (url, handler) {
     return this.add('GET', url, handler)
   }
 
-
   /**
-   * 
-   * @param {string} url 
-   * @param {Handler} handler 
+   *
+   * @param {string} url
+   * @param {Handler} handler
    * @returns {Router}
    */
   head (url, handler) {
     return this.add('HEAD', url, handler)
   }
 
-
   /**
-   * 
-   * @param {string} url 
-   * @param {Handler} handler 
+   *
+   * @param {string} url
+   * @param {Handler} handler
    * @returns {Router}
    */
   post (url, handler) {
     return this.add('POST', url, handler)
   }
 
-
   /**
-   * 
-   * @param {string} url 
-   * @param {Handler} handler 
+   *
+   * @param {string} url
+   * @param {Handler} handler
    * @returns {Router}
    */
   put (url, handler) {
     return this.add('PUT', url, handler)
   }
 
-
   /**
-   * 
-   * @param {string} url 
-   * @param {Handler} handler 
+   *
+   * @param {string} url
+   * @param {Handler} handler
    * @returns {Router}
    */
   delete (url, handler) {
     return this.add('DELETE', url, handler)
   }
 
-
   /**
-   * 
-   * @param {string} url 
-   * @param {Handler} handler 
+   *
+   * @param {string} url
+   * @param {Handler} handler
    * @returns {Router}
    */
   patch (url, handler) {
     return this.add('PATCH', url, handler)
   }
 
-
   /**
-   * 
-   * @param {string} url 
-   * @param {Handler} handler 
+   *
+   * @param {string} url
+   * @param {Handler} handler
    * @returns {Router}
    */
   any (url, handler) {
@@ -179,10 +173,10 @@ export class Router {
   }
 
   /**
-   * 
+   *
    * @param {string} method
-   * @param {string} url 
-   * @param {Handler} handler 
+   * @param {string} url
+   * @param {Handler} handler
    * @returns {Router}
    */
   add (method, url, handler) {
@@ -203,8 +197,8 @@ export class Router {
   }
 
   /**
-   * 
-   * @param {Request} request 
+   *
+   * @param {Request} request
    * @returns {Route?}
    */
   route (request) {
@@ -224,11 +218,11 @@ export class Router {
 }
 
 /**
- * 
- * @param {Request} request 
- * @param {Route} route 
- * @param {MatchProperty} property 
- * @returns 
+ *
+ * @param {Request} request
+ * @param {Route} route
+ * @param {MatchProperty} property
+ * @returns
  */
 function matches (request, route, property) {
   if (property === 'pathname') {
@@ -271,9 +265,9 @@ function matches (request, route, property) {
 }
 
 /**
- * @param {string} routeProperty 
- * @param {string} requestProperty 
- * @returns 
+ * @param {string} routeProperty
+ * @param {string} requestProperty
+ * @returns
  */
 function areEqual (routeProperty, requestProperty) {
   if (routeProperty === '*') return true

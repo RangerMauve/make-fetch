@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "node test",
-    "lint": "standard --fix && tsc"
+    "lint": "standard --fix && tsc --noEmit",
+    "build": "tsc",
+    "preversion": "npm run lint && npm run build && npm run test"
   },
   "repository": {
     "type": "git",
