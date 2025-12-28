@@ -1,7 +1,7 @@
 /** @typedef {ConstructorParameters<typeof globalThis.Response>[0] | AsyncIterable<string>} Body */
 /** @typedef {Response|ResponseInit & {body?: Body}} ResponseLike */
 /** @typedef {(request: Request) => ResponseLike|Promise<ResponseLike> } Handler */
-/** @typedef {(error: Error, request: Request) => ResponseLike } ErrorHandler */
+/** @typedef {(error: Error, request: Request) => ResponseLike|Promise<ResponseLike> } ErrorHandler */
 
 /**
  * @typedef {object} Route
